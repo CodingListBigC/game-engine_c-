@@ -7,52 +7,53 @@
 Window::Window() : window(nullptr), glContext(nullptr) {};
 
 int Window::init() {
-  std::cout << "Initializing SDL..." << std::endl;
+  // 1. Hyprland/Wayland Compatibility Fix
+  setenv("SDL_VIDEODRIVER", "x11", 0);
+
+  // 2. Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError()
+              << std::endl;
     return 1;
   }
 
-  // 1. Setup OpenGL Attributes
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  // 3. Set OpenGL Attributes (Compatibility mode for Legacy GL)
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+                      SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-  std::cout << "Creating Window..." << std::endl;
-  // 2. Added SDL_WINDOW_OPENGL flag
-  this->window = SDL_CreateWindow("3D Cube Test", SDL_WINDOWPOS_CENTERED,
-                                  SDL_WINDOWPOS_CENTERED, Window_Const::width,
-                                  Window_Const::height,
-                                  SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+  // 4. Create Window
+  window = SDL_CreateWindow("Arch Hyprland Cube", SDL_WINDOWPOS_CENTERED,
+                            SDL_WINDOWPOS_CENTERED, 800, 600,
+                            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
-  if (!window) {
-    std::cerr << "Window Failed: " << SDL_GetError() << std::endl;
+  // --- MISSING PIECE START ---
+  glContext = SDL_GL_CreateContext(window);
+  if (!glContext) {
+    std::cerr << "GL Context could not be created!" << std::endl;
     return 1;
   }
-
-  // 3. Create and store the OpenGL Context
-  this->glContext = SDL_GL_CreateContext(window);
-  if (this->glContext) {
-    SDL_GL_MakeCurrent(window, this->glContext); // Add this!
-  } else {
-    std::cerr << "OpenGL Context Failed: " << SDL_GetError() << std::endl;
-    return 1;
-  }
-
-  // 4. Important: glViewport tells OpenGL the size of the window
-  glViewport(0, 0, Window_Const::width, Window_Const::height);
-  glEnable(GL_DEPTH_TEST); // Needed so the cube doesn't look inside-out
+  // 9. Global GL States
+  glEnable(GL_DEPTH_TEST);
+  glClearColor(0.1f, 0.1f, 0.15f, 1.0f); // "Oarchy" Dark Blue-Grey background
 
   return 0;
 }
 
 void Window::renderStart() {
-  // Use OpenGL clear color instead of SDL_Renderer
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  // --- RENDER START ---
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  // --- SETUP PROJECTION (The "Camera Lens") ---
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
 }
 
 void Window::renderEnd() {
-  // This is the OpenGL version of SDL_RenderPresent
+  // Render of render
   SDL_GL_SwapWindow(window);
 }
 
@@ -61,4 +62,6 @@ void Window::cleanup() {
     SDL_GL_DeleteContext(glContext);
   if (window)
     SDL_DestroyWindow(window);
+
+  SDL_Quit();
 }

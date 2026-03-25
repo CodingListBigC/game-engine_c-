@@ -1,3 +1,4 @@
+#include "./manger/window.h"
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <filesystem>
@@ -9,37 +10,12 @@
 #include "./include/tiny_obj_loader.h"
 
 int main(int argc, char *argv[]) {
-  // 1. Hyprland/Wayland Compatibility Fix
-  setenv("SDL_VIDEODRIVER", "x11", 0);
-
-  // 2. Initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError()
-              << std::endl;
-    return 1;
-  }
-
-  // 3. Set OpenGL Attributes (Compatibility mode for Legacy GL)
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
-                      SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
-  // 4. Create Window
-  SDL_Window *window = SDL_CreateWindow(
-      "Arch Hyprland Cube", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,
-      600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-
-  if (!window) {
+  Window masterWindow;
+  if (masterWindow.init() == 1) {
     std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError()
               << std::endl;
     return 1;
   }
-
-  // 5. Create Context
-  SDL_GLContext context = SDL_GL_CreateContext(window);
 
   // 6. Initialize GLEW
   glewExperimental = GL_TRUE;
@@ -75,10 +51,6 @@ int main(int argc, char *argv[]) {
   glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float),
                vertex_data.data(), GL_STATIC_DRAW);
 
-  // 9. Global GL States
-  glEnable(GL_DEPTH_TEST);
-  glClearColor(0.1f, 0.1f, 0.15f, 1.0f); // "Oarchy" Dark Blue-Grey background
-
   // 10. Main Loop
   bool quit = false;
   SDL_Event e;
@@ -93,12 +65,8 @@ int main(int argc, char *argv[]) {
         quit = true;
     }
 
-    // --- RENDER START ---
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    masterWindow.renderStart();
 
-    // --- SETUP PROJECTION (The "Camera Lens") ---
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
     // Simple Perspective: FOV 45deg, Aspect 4/3, Near 0.1, Far 100
     float aspect = 800.0f / 600.0f;
     float fov = 45.0f;
@@ -141,15 +109,12 @@ int main(int argc, char *argv[]) {
 
     glDisableClientState(GL_VERTEX_ARRAY);
 
-    // --- RENDER END ---
-    SDL_GL_SwapWindow(window);
+    masterWindow.renderEnd();
   }
 
   // Cleanup
   glDeleteBuffers(1, &vbo);
-  SDL_GL_DeleteContext(context);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
+  masterWindow.cleanup();
 
   return 0;
 }
