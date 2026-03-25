@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 1. Find SDL2 dependency
 # On Linux, this usually uses the system's FindSDL2.cmake or pkg-config
 find_package(SDL2 REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
 
 # 2. Collect all source files
 # This avoids the "undefined reference" error by ensuring all .cpp files are compiled
@@ -27,6 +29,8 @@ target_include_directories(game_engine PRIVATE
 # 5. Link libraries
 target_link_libraries(game_engine PRIVATE 
     ${SDL2_LIBRARIES}
+		GLEW::GLEW
+		OpenGL::GL
 )
 
 # Optional: Set the output directory to .build like your original setup

@@ -23,7 +23,7 @@ public:
 private:
   // Main SDL window
   SDL_Window *window;
-  SDL_Renderer *renderer;
+  SDL_GLContext glContext;
 
   RGB_Control color{0, 255, 0};
 };
