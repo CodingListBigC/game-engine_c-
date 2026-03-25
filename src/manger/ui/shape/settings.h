@@ -2,7 +2,7 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-class Setting {
+class ItemDefaultSetting {
 private:
   float x;
   float y;
@@ -13,7 +13,8 @@ private:
   RGB_Control textColor{0, 0, 0};
 
 public:
-  Setting(float xInput, float yInput, float widthInput, float heightInput);
+  ItemDefaultSetting(float xInput, float yInput, float widthInput,
+                     float heightInput);
 
   // Shape Sizes
   //		Getters
