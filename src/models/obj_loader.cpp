@@ -2,6 +2,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../include/tiny_obj_loader.h"
 #include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <vector>
 
@@ -37,7 +38,19 @@ void Model_Loader::vboSetup() {
 }
 
 void Model_Loader::renderModel() {
-  // TODO: Add model matrix and add location and position
+  // 1. Get the matrix from your class
+  glm::mat4 modelMat = this->objectLocation.getModelMatrix();
+
+  // 2. Tell OpenGL we want to modify the ModelView matrix stack
+  glMatrixMode(GL_MODELVIEW);
+
+  // 3. Save the previous state (so we don't affect other models)
+  glPushMatrix();
+
+  // 4. Apply your custom matrix
+  // glMultMatrixf expects a raw pointer to 16 floats
+  glMultMatrixf(glm::value_ptr(modelMat));
+
   // --- DRAW CUBE ---
   glColor3f(1.0f, 0.5f, 0.0f); // Oarchy Orange color
   glEnableClientState(GL_VERTEX_ARRAY);

@@ -3,6 +3,7 @@
 
 #include "../manger/ui/shape/settings.h"
 #include "../utils/color/rgb_control.h"
+#include "../utils/object/transform.h"
 #include <GL/glew.h>
 #include <string>
 #include <vector>
@@ -13,6 +14,7 @@ private:
   std::string objFileName = "cube.obj";
   std::vector<float> vertex_data;
   GLuint vbo;
+  Transform objectLocation{};
 
 public:
   Model_Loader(std::string mainFolderInput, std::string objFileNameInput);

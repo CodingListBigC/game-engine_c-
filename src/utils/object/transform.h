@@ -1,45 +1,77 @@
 #ifndef TRANSFORM_OBJECT_H
 #define TRANSFORM_OBJECT_H
 
+#include <glm/ext/vector_float3.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+// Assuming your Vector3 is compatible or convertible to glm::vec3
 #include "../units/vector/vector3f.h"
 
 class Transform {
 private:
-  Vector3 position;
-  Vector3 rotation;
+  glm::vec3 position;
+  glm::vec3 rotation;
   float m_scale;
+  bool m_isDirty;
+  glm::mat4 cachedMatrix;
 
-  bool isDirty;
+  // Helper to convert your custom Vector3 to glm::vec3 for math
+  glm::vec3 toGlm(Vector3 v) const { return glm::vec3(v.x, v.y, v.z); }
 
 public:
+  // Constructors
   Transform()
-      : position{0, 0, 0}, rotation{0, 0, 0}, m_scale(1.0f), isDirty(true) {}
-  Transform(Vector3 _position, Vector3 _rotation)
-      : position{_position}, rotation{_rotation}, m_scale(1.0f), isDirty(true) {
+      : position{0, 0, 0}, rotation{0, 0, 0}, m_scale(1.0f), m_isDirty(true) {}
+
+  Transform(glm::vec3 _position, glm::vec3 _rotation)
+      : position{_position}, rotation{_rotation}, m_scale(1.0f),
+        m_isDirty(true) {}
+
+  // Copy Constructor
+  Transform(const Transform &other)
+      : position(other.position), rotation(other.rotation),
+        m_scale(other.m_scale), m_isDirty(true) {
+    // We set isDirty to true so the new copy generates its own matrix
   }
 
-  Transform(const Transform &other) {
-    position = other.position;
-    rotation = other.rotation;
-    m_scale = other.m_scale;
-    isDirty = other.isDirty;
-  }
-
-  // Method to modify data safely
+  // Setters
   void setPosition(float x, float y, float z) {
     position = {x, y, z};
-    isDirty = true; // Mark for GPU update
+    m_isDirty = true;
   }
 
-  // Read-only access to the data
-  Vector3 getPosition() const { return position; }
-
-  void translate(Vector3 offset) {
+  void translate(glm::vec3 offset) {
     position = position + offset;
-    isDirty = true; // Mark for GPU update
+    m_isDirty = true;
   }
 
-  Transform createCopyOnHeap() { return new Transform(*this); }
+  // Getters
+  glm::vec3 getPosition() const { return position; }
+
+  // FIXED: Return type must be Transform* if using 'new'
+  Transform *createCopyOnHeap() { return new Transform(*this); }
+
+  glm::mat4 getModelMatrix() {
+    if (m_isDirty) {
+      // 1. Identity
+      glm::mat4 model = glm::mat4(1.0f);
+
+      // 2. Translate
+      model = glm::translate(model, position);
+
+      // 3. Rotate (Example: Euler angles)
+      model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+      model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
+      model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
+
+      // 4. Scale
+      model = glm::scale(model, glm::vec3(m_scale));
+
+      cachedMatrix = model;
+      m_isDirty = false;
+    }
+    return cachedMatrix;
+  }
 };
 
 #endif

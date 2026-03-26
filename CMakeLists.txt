@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(glm REQUIRED)
 
 # 2. Collect all source files
 # This avoids the "undefined reference" error by ensuring all .cpp files are compiled
@@ -31,6 +32,7 @@ target_link_libraries(game_engine PRIVATE
     ${SDL2_LIBRARIES}
 		GLEW::GLEW
 		OpenGL::GL
+		glm::glm
 )
 
 # Optional: Set the output directory to .build like your original setup
