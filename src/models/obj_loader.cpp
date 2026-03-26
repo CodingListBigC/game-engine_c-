@@ -1,4 +1,5 @@
 #include "obj_loader.h"
+#define TINYOBJLOADER_IMPLEMENTATION
 #include "../include/tiny_obj_loader.h"
 #include <GL/glew.h>
 #include <iostream>
@@ -13,7 +14,7 @@ void Model_Loader::loadModel() {
   std::string inputfile = this->mainFolder + this->objFileName;
   if (!reader.ParseFromFile(inputfile)) {
     std::cerr << "TinyObj Error: " << reader.Error();
-    return;
+    exit(1);
   }
 
   auto &attrib = reader.GetAttrib();
