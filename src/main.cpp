@@ -1,12 +1,15 @@
-#include "./manger/ui/font/FontRenderer.h"
-#include "./manger/window.h"
-#include "./models/obj_loader.h"
-#include "./user/camera.h"
+
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <filesystem>
 #include <iostream>
 #include <vector>
+// Own Libs
+#include "./manger/ui/font/FontRenderer.h"
+#include "./manger/ui/shape/rectangle.h"
+#include "./manger/window.h"
+#include "./models/obj_loader.h"
+#include "./user/camera.h"
 
 // Include your tiny_obj_loader here
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -79,6 +82,9 @@ int main(int argc, char *argv[]) {
     fontRenderer.renderText(U"\uf007 User: BigC", 20.0f, 40.0f, 1.0f,
                             glm::vec3(1.0f, 0.5f, 0.0f));
     fontRenderer.renderText(U"FPS: 60", 20.0f, 80.0f, 0.8f, glm::vec3(1.0f));
+
+    glColor3f(0.2f, 0.6f, 1.0f); // Set color to a nice blue
+    drawFilledRoundedRect(50, 100, 200, 200, 20, 16);
 
     // Restore Matrix State
     glPopMatrix();
