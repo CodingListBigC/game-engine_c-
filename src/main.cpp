@@ -1,4 +1,5 @@
 #include "./manger/window.h"
+#include "./models/obj_loader.h"
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <filesystem>
@@ -7,7 +8,6 @@
 
 // Include your tiny_obj_loader here
 #define TINYOBJLOADER_IMPLEMENTATION
-#include "./include/tiny_obj_loader.h"
 
 int main(int argc, char *argv[]) {
   Window masterWindow;
@@ -17,39 +17,15 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  Model_Loader model{"../resource/", "cube.obj"};
+  model.loadModel();
+  model.vboSetup();
   // 6. Initialize GLEW
   glewExperimental = GL_TRUE;
   if (glewInit() != GLEW_OK) {
     std::cerr << "Failed to initialize GLEW" << std::endl;
     return 1;
   }
-
-  // 7. Load OBJ
-  std::string inputfile = "../resource/cube.obj";
-  tinyobj::ObjReader reader;
-  if (!reader.ParseFromFile(inputfile)) {
-    std::cerr << "TinyObj Error: " << reader.Error();
-    return 1;
-  }
-
-  auto &attrib = reader.GetAttrib();
-  auto &shapes = reader.GetShapes();
-  std::vector<float> vertex_data;
-
-  for (const auto &shape : shapes) {
-    for (const auto &index : shape.mesh.indices) {
-      vertex_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-      vertex_data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-      vertex_data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-    }
-  }
-
-  // 8. VBO Setup
-  GLuint vbo;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float),
-               vertex_data.data(), GL_STATIC_DRAW);
 
   // 10. Main Loop
   bool quit = false;
@@ -98,23 +74,14 @@ int main(int argc, char *argv[]) {
     glRotatef(rotation, 0.0f, 1.0f, 0.0f);        // Spin on Y axis
     glRotatef(rotation * 0.5f, 1.0f, 0.0f, 0.0f); // Spin on X axis
     rotation += 0.5f;
-
-    // --- DRAW CUBE ---
-    glColor3f(1.0f, 0.5f, 0.0f); // Oarchy Orange color
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexPointer(3, GL_FLOAT, 0, 0);
-
-    glDrawArrays(GL_TRIANGLES, 0, vertex_data.size() / 3);
-
-    glDisableClientState(GL_VERTEX_ARRAY);
+    model.renderModel();
 
     masterWindow.renderEnd();
   }
 
   // Cleanup
-  glDeleteBuffers(1, &vbo);
   masterWindow.cleanup();
+  model.cleanup();
 
   return 0;
 }

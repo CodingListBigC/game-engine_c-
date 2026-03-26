@@ -22,7 +22,7 @@ add_executable(game_engine ${SOURCES})
 
 # 4. Include directories (where your headers live)
 target_include_directories(game_engine PRIVATE 
-    src 
+    src
     ${SDL2_INCLUDE_DIRS}
 )
 
