@@ -13,7 +13,9 @@ find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
+find_package(Freetype REQUIRED)
 
+# Link the library
 # 2. Collect all source files
 # This avoids the "undefined reference" error by ensuring all .cpp files are compiled
 file(GLOB_RECURSE SOURCES "src/*.cpp")
@@ -25,11 +27,13 @@ add_executable(game_engine ${SOURCES})
 target_include_directories(game_engine PRIVATE 
     src
     ${SDL2_INCLUDE_DIRS}
+	${FREETYPE_INCLUDE_DIRS}
 )
 
 # 5. Link libraries
 target_link_libraries(game_engine PRIVATE 
     ${SDL2_LIBRARIES}
+	${FREETYPE_LIBRARIES}
 		GLEW::GLEW
 		OpenGL::GL
 		glm::glm
