@@ -1,6 +1,8 @@
 #ifndef FONT_RENDERER_H
 #define FONT_RENDERER_H
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include <glm/glm.hpp>
 #include <map>
 #include <string>

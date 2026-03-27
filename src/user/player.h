@@ -6,9 +6,14 @@
 
 class Player {
 public:
+  // Constustor
   Player(std::string _username);
   Player(std::string _username, RGB_Control &_defaultColor);
   ~Player();
+
+  // Getters
+  std::string getUsername() { return this->username; };
+  glm::vec3 getPosition() { return this->position; };
 
 private:
   std::string username = "testDummy";
@@ -16,3 +21,5 @@ private:
   RGB_Control defaultColor{0, 0, 0};
   glm::vec3 position{0, 0, 0};
 };
+
+#endif
