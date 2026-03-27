@@ -36,3 +36,6 @@ Makefile
 # --- OS specific ---
 .DS_Store
 Thumbs.db
+
+# -- Notes --
+.selfNotes/
