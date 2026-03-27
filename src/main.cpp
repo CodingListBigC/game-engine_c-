@@ -10,6 +10,7 @@
 #include "./manger/window.h"
 #include "./models/obj_loader.h"
 #include "./user/camera.h"
+#include "./user/player.h"
 
 // Include your tiny_obj_loader here
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -18,6 +19,7 @@ int main(int argc, char *argv[]) {
   Window masterWindow;
   User_Camera userCamera{};
   FontRenderer fontRenderer{};
+  Player player{"Hello"};
 
   if (masterWindow.init() == 1) {
     std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError()
