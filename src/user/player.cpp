@@ -1,4 +1,5 @@
 #include "player.h"
+#include <glm/ext/vector_float3.hpp>
 #include <iostream>
 #include <utility>
 
@@ -11,3 +12,9 @@ Player::~Player() {
   defaultColor = {0, 0, 0};
   // Destructor logic
 }
+
+void Player::changePosition(glm::vec3 changePosition) {
+  this->position.x += changePosition.x;
+  this->position.y += changePosition.y;
+  this->position.z += changePosition.z;
+};

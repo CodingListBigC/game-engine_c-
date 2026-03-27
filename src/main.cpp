@@ -8,6 +8,7 @@
 #include <ostream>
 #include <vector>
 // Own Libs
+#include "./manger/inputs/inputMaster.h"
 #include "./manger/ui/font/FontRenderer.h"
 #include "./manger/ui/shape/rectangle.h"
 #include "./manger/window.h"
@@ -26,6 +27,8 @@ int main(int argc, char *argv[]) {
   FontRenderer fontRenderer{};
   Json::Value playerData = getJsonData("../resource/user/mainUser.json");
   Player player{playerData["username"].asString()};
+
+  Input_Master inputMaster{};
 
   if (masterWindow.init() == 1) {
     std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError()
@@ -56,10 +59,14 @@ int main(int argc, char *argv[]) {
             << std::endl;
 
   while (!quit) {
+    inputMaster.update();
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_QUIT)
         quit = true;
+      inputMaster.setInput(e);
     }
+    inputMaster.checkInputs();
+    player.changePosition(inputMaster.getPlayerMoveAmount());
 
     masterWindow.renderStart();
     // Set Project Matrix

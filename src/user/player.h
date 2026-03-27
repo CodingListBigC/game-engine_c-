@@ -14,6 +14,7 @@ public:
   // Getters
   std::string getUsername() { return this->username; };
   glm::vec3 getPosition() { return this->position; };
+  void changePosition(glm::vec3 changePos);
 
 private:
   std::string username = "testDummy";
