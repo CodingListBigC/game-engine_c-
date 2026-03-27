@@ -14,6 +14,10 @@ find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
 find_package(Freetype REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+
+pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 
 # Link the library
 # 2. Collect all source files
@@ -28,12 +32,14 @@ target_include_directories(game_engine PRIVATE
     src
     ${SDL2_INCLUDE_DIRS}
 	${FREETYPE_INCLUDE_DIRS}
+	${JSONCPP_INCLUDE_DIRS}
 )
 
 # 5. Link libraries
 target_link_libraries(game_engine PRIVATE 
     ${SDL2_LIBRARIES}
 	${FREETYPE_LIBRARIES}
+	${JSONCPP_LIBRARIES}
 		GLEW::GLEW
 		OpenGL::GL
 		glm::glm
