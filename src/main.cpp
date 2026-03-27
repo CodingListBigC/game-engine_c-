@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <glm/ext/vector_float3.hpp>
 #include <iostream>
+#include <json/json.h>
+#include <ostream>
 #include <vector>
 // Own Libs
 #include "./manger/ui/font/FontRenderer.h"
@@ -12,6 +14,7 @@
 #include "./models/obj_loader.h"
 #include "./user/camera.h"
 #include "./user/player.h"
+#include "./utils/fileLoad/readJson.h"
 #include "./utils/string.h"
 
 // Include your tiny_obj_loader here
@@ -21,7 +24,8 @@ int main(int argc, char *argv[]) {
   Window masterWindow;
   User_Camera userCamera{};
   FontRenderer fontRenderer{};
-  Player player{"Hello"};
+  Json::Value playerData = getJsonData("../resource/user/mainUser.json");
+  Player player{playerData["username"].asString()};
 
   if (masterWindow.init() == 1) {
     std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError()
