@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# 1. Get the absolute path to the directory where THIS script lives
+PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
+
+# 2. Change the working directory to that root
+cd "$PROJECT_ROOT" || exit
+>>>>>>> 2edadbf (15:(feat): make running scripts better)
 # If $1 is empty, choice becomes 1
 choice=${1:-1}
 
