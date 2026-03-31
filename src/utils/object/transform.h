@@ -4,6 +4,7 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 // Assuming your Vector3 is compatible or convertible to glm::vec3
 #include "../units/vector/vector3f.h"
 
@@ -71,6 +72,13 @@ public:
       m_isDirty = false;
     }
     return cachedMatrix;
+  }
+
+  void debug() {
+    std::cout << "Position: " << std::endl;
+    std::cout << "	x: " << this->position.x << std::endl;
+    std::cout << "	y: " << this->position.y << std::endl;
+    std::cout << "	z: " << this->position.z << std::endl;
   }
 };
 

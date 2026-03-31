@@ -8,18 +8,16 @@
 #include <ostream>
 #include <vector>
 // Own Libs
+// #include "./include/OBJ_Loader.h"
 #include "./manger/inputs/inputMaster.h"
 #include "./manger/ui/font/FontRenderer.h"
 #include "./manger/ui/shape/rectangle.h"
 #include "./manger/window.h"
-#include "./models/obj_loader.h"
+#include "./models/myObjLoader.h"
 #include "./user/camera.h"
 #include "./user/player.h"
 #include "./utils/fileLoad/readJson.h"
 #include "./utils/string.h"
-
-// Include your tiny_obj_loader here
-#define TINYOBJLOADER_IMPLEMENTATION
 
 int main(int argc, char *argv[]) {
   Window masterWindow;
@@ -29,6 +27,9 @@ int main(int argc, char *argv[]) {
   Player player{playerData["username"].asString()};
 
   Input_Master inputMaster{};
+
+  My_Obj_Loader model{"../resource/cube.obj"};
+  model.init();
 
   if (masterWindow.init() == 1) {
     std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError()
@@ -45,10 +46,6 @@ int main(int argc, char *argv[]) {
   fontRenderer.init(
       "../resource/font/jetBrainsMono/JetBrainsMonoNerdFontMono-Regular.ttf",
       24);
-
-  Model_Loader model{"../resource/", "cube.obj"};
-  model.loadModel();
-  model.vboSetup();
 
   // 10. Main Loop
   bool quit = false;
@@ -78,11 +75,12 @@ int main(int argc, char *argv[]) {
     glLoadIdentity();
     glm::vec3 playerPos = player.getPosition();
     glTranslatef(playerPos.x, playerPos.y, playerPos.z);
-    glTranslatef(0.0f, 0.0f, -5.0f);                 // Move cube 5 units away
-    glRotatef(rotation * 0.5, rotation, 1.0f, 0.0f); // Spin on Y axis
-    // glRotatef(rotation * 0.5f, 1.0f, 0.0f, 0.0f); // Spin on X axis
-    rotation += 0.5f;
-    model.renderModel();
+    // glTranslatef(0.0f, 0.0f, -5.0f);                 // Move cube 5 units
+    // away glRotatef(rotation * 0.5, rotation, 1.0f, 0.0f); // Spin on Y axis
+    //  glRotatef(rotation * 0.5f, 1.0f, 0.0f, 0.0f); // Spin on X axis
+    // rotation += 0.5f;
+
+    model.renderObject();
 
     glDisable(GL_DEPTH_TEST); // UI shouldn't hide behind 3D objects
 
@@ -115,7 +113,6 @@ int main(int argc, char *argv[]) {
 
   // Cleanup
   masterWindow.cleanup();
-  model.cleanup();
 
   return 0;
 }
