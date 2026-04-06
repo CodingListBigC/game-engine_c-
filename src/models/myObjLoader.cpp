@@ -41,6 +41,7 @@ void My_Obj_Loader::renderObject() {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glMultMatrixf(glm::value_ptr(this->objectTransform.getModelMatrix()));
+  this->drawInternal();
   glPopMatrix();
 }
 

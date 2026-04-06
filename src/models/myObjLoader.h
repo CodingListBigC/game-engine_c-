@@ -1,6 +1,7 @@
 
 #ifndef MY_OBJ_LOADER_H
 #define MY_OBJ_LOADER_H
+#include <istream>
 #pragma once
 
 #include "../utils/object/transform.h"
@@ -20,6 +21,7 @@ public:
   ~My_Obj_Loader();
   void init();
   void renderObject();
+  void drawInternal();
 
 private:
   Transform objectTransform{};
