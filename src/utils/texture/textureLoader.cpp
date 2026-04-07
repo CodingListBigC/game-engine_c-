@@ -2,6 +2,28 @@
 #include "textureLoader.h"
 #include "../../include/stb_image.h"
 #include <iostream>
+#include <map>
+#include <string>
+
+// A global or class-level map to store paths and their corresponding IDs
+std::map<std::string, GLuint> textureCache;
+
+GLuint loadTextureCached(const char *path) {
+  // 1. Check if we already loaded this exact path
+  if (textureCache.find(path) != textureCache.end()) {
+    return textureCache[path]; // Return the existing ID!
+  }
+
+  // 2. If not found, do the actual loading work
+  GLuint newID = loadTexture(path); // Call your existing function
+
+  // 3. Store it for next time
+  if (newID != 0) {
+    textureCache[path] = newID;
+  }
+
+  return newID;
+}
 
 GLuint loadTexture(const char *path) {
   GLuint textureID;
@@ -13,6 +35,11 @@ GLuint loadTexture(const char *path) {
   stbi_set_flip_vertically_on_load(true);
 
   unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+
+  if (data == nullptr) {
+    std::cerr << "SEGFAULT PREVENTED: Image not found at " << path << std::endl;
+    return 0;
+  }
 
   if (data) {
     GLenum format = GL_RGB;

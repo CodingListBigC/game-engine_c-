@@ -28,9 +28,6 @@ int main(int argc, char *argv[]) {
 
   Input_Master inputMaster{};
 
-  My_Obj_Loader model{"../resource/cube.obj"};
-  model.init();
-
   if (masterWindow.init() == 1) {
     std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError()
               << std::endl;
@@ -47,6 +44,8 @@ int main(int argc, char *argv[]) {
       "../resource/font/jetBrainsMono/JetBrainsMonoNerdFontMono-Regular.ttf",
       24);
 
+  My_Obj_Loader model{"../resource/model/cube/cube.obj",
+                      "../resource/model/cube/Cube.png"};
   // 10. Main Loop
   bool quit = false;
   SDL_Event e;
