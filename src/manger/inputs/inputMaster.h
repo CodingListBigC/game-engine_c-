@@ -4,6 +4,7 @@
 #include "inputPlayer.h"
 #include "keyboard.h"
 #include <SDL2/SDL_events.h>
+#include <glm/detail/qualifier.hpp>
 #include <glm/ext/vector_float3.hpp>
 
 class Input_Master {
@@ -15,8 +16,11 @@ public:
   void setInput(const SDL_Event &e);
   void checkInputs();
 
-  // Get values
+  // Get values player
   glm::vec3 getPlayerMoveAmount() { return inputPlayer.getMoveAmount(); };
+  glm::vec3 getPlayerRotationAmount() {
+    return inputPlayer.getRotationAmount();
+  };
 
 private:
   Input_Player inputPlayer{};
