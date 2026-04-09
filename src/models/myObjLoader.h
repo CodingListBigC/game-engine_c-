@@ -2,8 +2,8 @@
 #ifndef MY_OBJ_LOADER_H
 #define MY_OBJ_LOADER_H
 
+#include "../utils/object/customStructs.h"
 #include "../utils/object/hitBox.h"
-#include "../utils/object/meshData.h"
 #include "../utils/object/transform.h"
 #include <GL/glew.h>
 #include <istream>

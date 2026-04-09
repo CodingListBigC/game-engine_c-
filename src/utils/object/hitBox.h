@@ -1,7 +1,7 @@
 #ifndef HIT_BOX_H
 #define HIT_BOX_H
 
-#include "meshData.h"
+#include "customStructs.h"
 #include "transform.h"
 #include <vector>
 

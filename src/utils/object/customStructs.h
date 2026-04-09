@@ -1,5 +1,5 @@
-#ifndef MESH_DATA_H
-#define MESH_DATA_H
+#ifndef CUSTOM_STRUCTS_H
+#define CUSTOM_STRUCTS_H
 
 #include <GL/glew.h>
 #include <vector>
@@ -18,4 +18,4 @@ struct HitBox {
   float maxZ;
 };
 
-#endif
+#endif //  CUSTOM_STRUCTS_H
