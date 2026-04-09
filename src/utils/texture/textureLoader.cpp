@@ -63,7 +63,7 @@ GLuint loadTexture(const char *path) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbi_image_free(data);
-    std::cout << "Successfully loaded texture: " << path << std::endl;
+    // std::cout << "Successfully loaded texture: " << path << std::endl;
   } else {
     std::cerr << "Texture failed to load at path: " << path << std::endl;
     stbi_image_free(data);

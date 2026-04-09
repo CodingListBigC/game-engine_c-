@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../include/OBJ_Loader.h"
+#include "../utils/object/hitBox.h"
 #include "../utils/texture/textureLoader.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <ostream>
@@ -43,6 +44,8 @@ void My_Obj_Loader::initModel() {
       this->meshes.push_back(data);
     }
   }
+
+  Hit_Box testHixBox{this->meshes};
 
   this->objectTransform.setPosition(0.0f, 0.0f, -10.0f);
 }

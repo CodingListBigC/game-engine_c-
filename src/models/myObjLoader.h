@@ -28,6 +28,8 @@ public:
   void renderObject();
   void drawInternal();
 
+  std::vector<MeshData> getMeshData() { return this->meshes; };
+
 private:
   Transform objectTransform{};
   bool loadout;
