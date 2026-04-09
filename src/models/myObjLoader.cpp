@@ -45,7 +45,7 @@ void My_Obj_Loader::initModel() {
     }
   }
 
-  Hit_Box testHixBox{this->meshes};
+  this->modelHitBox.updateHitBox(this->meshes);
 
   this->objectTransform.setPosition(0.0f, 0.0f, -10.0f);
 }
@@ -91,4 +91,8 @@ void My_Obj_Loader::drawInternal() {
   }
 
   glDisable(GL_TEXTURE_2D); // Clean up
+}
+
+HitBox My_Obj_Loader::getDefaultHitBox() {
+  return this->modelHitBox.getCurrentHitBox(this->objectTransform);
 }
