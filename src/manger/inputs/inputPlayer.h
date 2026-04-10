@@ -2,6 +2,8 @@
 #define INPUT_PLAYER_H
 
 #include "keyboard.h"
+#include <glm/detail/qualifier.hpp>
+#include <glm/ext/vector_float3.hpp>
 #include <glm/vec3.hpp>
 
 class Input_Player {
@@ -10,7 +12,7 @@ public:
   Input_Player();
   ~Input_Player();
   // Check inputs
-  void checkKeyboardInput(const Keyboard &keyboard);
+  void checkKeyboardInput(const Keyboard &keyboard, glm::vec3 currentRotation);
   // Reset values
   void resetValues();
   // Get Values
@@ -25,7 +27,7 @@ private:
   const float rotationDefualtPlayerAmount = 1;
   float rotationPlayerAmount = rotationDefualtPlayerAmount;
 
-  void checkMoveAmount(const Keyboard &keyboard);
+  void checkMoveAmount(const Keyboard &keyboard, glm::vec3 currentRotation);
   void checkRotationAmount(const Keyboard &keyboard);
 };
 

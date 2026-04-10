@@ -1,6 +1,6 @@
 #include "hitBox.h"
 #include "../../models/myObjLoader.h"
-#include "meshData.h"
+#include "customStructs.h"
 #include <algorithm>
 #include <glm/ext/vector_float3.hpp>
 #include <iostream>

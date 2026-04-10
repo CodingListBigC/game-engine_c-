@@ -1,8 +1,9 @@
 #include "inputPlayer.h"
 #include "keyboard.h"
 #include <SDL2/SDL_keycode.h>
-#include <cstdarg>
-#include <iostream>
+#include <cmath>
+#include <glm/detail/qualifier.hpp>
+#include <glm/ext/vector_float3.hpp>
 
 Input_Player::Input_Player() {
   // Constructor logic
@@ -12,34 +13,61 @@ Input_Player::~Input_Player() {
   // Destructor logic
 }
 
-void Input_Player::checkKeyboardInput(const Keyboard &keyboard) {
-  this->checkMoveAmount(keyboard);
+void Input_Player::checkKeyboardInput(const Keyboard &keyboard,
+                                      glm::vec3 currentRotation) {
   this->checkRotationAmount(keyboard);
+  currentRotation.x += this->rotationAmount.x;
+  currentRotation.y += this->rotationAmount.y;
+  currentRotation.z += this->rotationAmount.z;
+  this->checkMoveAmount(keyboard, currentRotation);
 }
 
-void Input_Player::checkMoveAmount(const Keyboard &keyboard) {
+double toRadians(double degree) {
+  const double pi = std::acos(-1.0);
+  return degree * (pi / 180.0);
+}
+
+void Input_Player::checkMoveAmount(const Keyboard &keyboard,
+                                   glm::vec3 currentRotation) {
+  float pitch = currentRotation.x;
+  float yaw = currentRotation.y;
+  // Increase speed
   if (keyboard.isKeyDown(SDLK_LCTRL)) {
     movePlayerAmount *= 10;
   }
 
+  // Change Values
+  float dx = 0;
+  float dy = 0;
+  float dz = 0;
+
+  // Move plaayer x,z
   if (keyboard.isKeyDown(SDLK_w)) {
-    this->moveAmount.z -= movePlayerAmount;
+    dx += std::sin(toRadians(yaw)) * movePlayerAmount;
+    dz -= std::cos(toRadians(yaw)) * movePlayerAmount;
   }
   if (keyboard.isKeyDown(SDLK_s)) {
-    this->moveAmount.z += movePlayerAmount;
+    dx -= std::sin(toRadians(yaw)) * movePlayerAmount;
+    dz += std::cos(toRadians(yaw)) * movePlayerAmount;
   }
   if (keyboard.isKeyDown(SDLK_a)) {
-    this->moveAmount.x -= movePlayerAmount;
+    dx -= std::cos(toRadians(pitch)) * movePlayerAmount;
+    dz -= std::sin(toRadians(pitch)) * movePlayerAmount;
   }
   if (keyboard.isKeyDown(SDLK_d)) {
-    this->moveAmount.x += movePlayerAmount;
+    dx += std::cos(toRadians(pitch)) * movePlayerAmount;
+    dz += std::sin(toRadians(pitch)) * movePlayerAmount;
   }
   if (keyboard.isKeyDown(SDLK_LSHIFT)) {
-    this->moveAmount.y -= movePlayerAmount;
+    dy -= movePlayerAmount;
   }
   if (keyboard.isKeyDown(SDLK_SPACE)) {
-    this->moveAmount.y += movePlayerAmount;
+    dy += movePlayerAmount;
   }
+
+  this->moveAmount.x += dx;
+  this->moveAmount.y += dy;
+  this->moveAmount.z += dz;
 }
 void Input_Player::checkRotationAmount(const Keyboard &keyboard) {
   // 1. Up/Down should affect the X-axis (Pitch)

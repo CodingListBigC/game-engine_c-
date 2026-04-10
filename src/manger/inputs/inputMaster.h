@@ -14,7 +14,7 @@ public:
   ~Input_Master();
   void update();
   void setInput(const SDL_Event &e);
-  void checkInputs();
+  void checkInputs(glm::vec3 inputRotation);
 
   // Get values player
   glm::vec3 getPlayerMoveAmount() { return inputPlayer.getMoveAmount(); };
