@@ -20,7 +20,7 @@ public:
   void renderAll();
 
 private:
-  Regular_Item_Manager<My_Obj_Loader> regularItemManager{};
+  Default_Item_Manager<My_Obj_Loader> regularItemManager{};
 };
 
 #endif // MODEL_MANGER_MASTER_H

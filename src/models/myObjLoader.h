@@ -22,6 +22,7 @@ public:
   void initModel();
   void initTexture();
   void renderObject();
+  void render() { renderObject(); };
   void drawInternal();
 
   std::vector<MeshData> getMeshData() { return this->meshes; };
