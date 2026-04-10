@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     }
 
     inputMaster.update(); // Update timers/deltas
-    inputMaster.checkInputs();
+    inputMaster.checkInputs(player.getRotation());
 
     player.changePosition(inputMaster.getPlayerMoveAmount());
     player.changeRotation(inputMaster.getPlayerRotationAmount());

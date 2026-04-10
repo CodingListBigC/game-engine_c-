@@ -1,21 +1,17 @@
 
 #ifndef MY_OBJ_LOADER_H
 #define MY_OBJ_LOADER_H
-#include <istream>
-#pragma once
 
+#include "../utils/object/customStructs.h"
+#include "../utils/object/hitBox.h"
 #include "../utils/object/transform.h"
 #include <GL/glew.h>
-#include <vector>
-
+#include <istream>
 #include <string>
+#include <vector>
+#pragma once
 
-// Simple struct to hold only what we need for rendering
-struct MeshData {
-  std::vector<float> vertices;
-  std::vector<float> texCoords;
-  GLuint textureID = 0;
-};
+// Class is mange a obj model and all of it properitys.
 class My_Obj_Loader {
 public:
   My_Obj_Loader();
@@ -28,12 +24,18 @@ public:
   void renderObject();
   void drawInternal();
 
+  std::vector<MeshData> getMeshData() { return this->meshes; };
+
+  HitBox getDefaultHitBox();
+
 private:
   Transform objectTransform{};
   bool loadout;
   std::string filePath = "";
   std::string imagePath = "";
   std::vector<MeshData> meshes;
+
+  Hit_Box modelHitBox{};
 };
 
 #endif // MY_OBJ_LOADER_H

@@ -1,6 +1,7 @@
 #include "inputMaster.h"
 #include "keyboard.h"
 #include <SDL2/SDL_events.h>
+#include <glm/ext/vector_float3.hpp>
 #include <iostream>
 
 Input_Master::Input_Master() {
@@ -29,13 +30,16 @@ void Input_Master::setInput(const SDL_Event &e) {
   }
 }
 
-void Input_Master::checkInputs() {
+glm::vec3 currentRotation{0, 0, 0};
+void Input_Master::checkInputs(glm::vec3 inputRotation) {
+  currentRotation = inputRotation;
   this->checkKeyboardInput();
   this->checkLeftClick();
   this->checkRightClick();
 }
 void Input_Master::checkKeyboardInput() {
-  this->inputPlayer.checkKeyboardInput(keyboard);
+  this->inputPlayer.checkKeyboardInput(keyboard, currentRotation);
+  std::cout << "currentRotation.x" << currentRotation.x << std::endl;
 };
 void Input_Master::checkLeftClick() {};
 void Input_Master::checkRightClick() {};
