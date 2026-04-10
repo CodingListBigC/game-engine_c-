@@ -24,6 +24,8 @@ public:
   // Destorys
   void destryItme(int index);
 
+  // Render
+
 private:
   std::vector<t> objectList;
 };
