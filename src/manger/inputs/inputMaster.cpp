@@ -37,9 +37,6 @@ void Input_Master::checkInputs(glm::vec3 inputRotation) {
   this->checkLeftClick();
   this->checkRightClick();
 }
-void Input_Master::checkKeyboardInput() {
-  this->inputPlayer.checkKeyboardInput(keyboard, currentRotation);
-  std::cout << "currentRotation.x" << currentRotation.x << std::endl;
-};
+void Input_Master::checkKeyboardInput() {};
 void Input_Master::checkLeftClick() {};
 void Input_Master::checkRightClick() {};

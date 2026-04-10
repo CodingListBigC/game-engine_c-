@@ -10,6 +10,7 @@
 
 // Own Libs
 #include "./manger/inputs/inputMaster.h"
+#include "./manger/model/modelMangerMaster.h"
 #include "./manger/ui/font/FontRenderer.h"
 #include "./manger/ui/shape/rectangle.h"
 #include "./manger/window.h"
@@ -67,12 +68,20 @@ int main(int argc, char *argv[]) {
       "../resource/font/jetBrainsMono/JetBrainsMonoNerdFontMono-Regular.ttf",
       24);
 
+  // Player Setup
   Json::Value playerData = getJsonData("../resource/user/mainUser.json");
   Player player{playerData["username"].asString()};
   Input_Master inputMaster{};
 
+  // Model Setup
+
+  // Init Items
+  Model_Manger_Master modelMangerMaster{};
   My_Obj_Loader model{"../resource/model/cube/cube.obj",
                       "../resource/model/cube/Cube.png"};
+
+  // Add item to master
+  modelMangerMaster.addItem(model);
 
   bool quit = false;
   SDL_Event e;
@@ -109,8 +118,10 @@ int main(int argc, char *argv[]) {
 
     glPushMatrix(); // Save identity
     applyCamera(player);
-    model.renderObject(); // Cube is rendered relative to camera
-    glPopMatrix();        // Restore identity
+
+    modelMangerMaster.renderAll();
+
+    glPopMatrix(); // Restore identity
 
     // --- RENDER 2D UI ---
     glDisable(GL_DEPTH_TEST);
